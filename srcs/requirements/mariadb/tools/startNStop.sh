@@ -16,6 +16,8 @@ trap "signal_terminate" SIGTERM
 echo "Initializing MariaDB database..."
 mariadb-install-db \
 	--auth-root-authentication-method=normal
+chown -R mysql:mysql /var/lib/mysql /var/log/mysql
+chmod 755 /var/lib/mysql /var/log/mysql
 echo "MariaDB initialization completed."
 
 echo "Starting MariaDB daemon..."
@@ -23,5 +25,5 @@ echo "Starting MariaDB daemon..."
 # This keeps the container running until MariaDB is stopped
 exec mariadbd &
 wait $!
-exit 1 
+exit 1
 
