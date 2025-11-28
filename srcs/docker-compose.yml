@@ -1,0 +1,29 @@
+services:
+  db:
+    image: mariadb-image
+    container_name: mariadb-container
+    build:
+      context: .
+      dockerfile: requirements/mariadb/Dockerfile
+    restart: on-failure
+    ports: 
+      - '3306:3306'
+    environment:
+      - MYSQL_DATABASE= $(MYSQL_DATABASE)
+      - MYSQL_ROOT_PASSWORD= $(MYSQL_ROOT_PASSWORD)
+      - MYSQL_USER= $(MYSQL_USER)
+      - MYSQL_PASSWORD= $(MYSQL_PASSWORD)
+    volumes:
+      - data:/var/lib/mysql
+    # networks:
+    #   - docker_network
+
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: "/home/aistierl/inception/srcs/requirements/mariadb/data"
+
+# networks:
