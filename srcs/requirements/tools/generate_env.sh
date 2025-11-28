@@ -2,29 +2,27 @@
 #Generate a .env file with environment variables for Docker Compose from ../secrets/ folder
 #Check if variable unset/empty, print in fd2 (stderr)
 
-MYSQL_DATABASE=$(grep -m1 '^db_name=' ../secrets/credentials.txt | cut -d '=' -f2 | sed 's/[[:space:]]*$//')
+MYSQL_DATABASE=$(grep -m1 '^db_name=' ~/inception/secrets/credentials.txt | cut -d '=' -f2 | sed 's/[[:space:]]*$//')
 
 if [ -z "${MYSQL_DATABASE:-}" ]; then
-    echo "ERROR: db_name not found in ../secrets/credentials.txt" >&2
+    echo "ERROR: db_name not found in ~/inception/secrets/credentials.txt" >&2
     exit 1
 fi
 
-MYSQL_ROOT_PASSWORD=$(cat ../secrets/db_root_password.txt | sed 's/[[:space:]]*$//')
-
+MYSQL_ROOT_PASSWORD=$(cat ~/inception/secrets/db_root_password.txt | sed 's/[[:space:]]*$//')
 if [ -z "${MYSQL_ROOT_PASSWORD:-}" ]; then
     echo "ERROR: db_root_password.txt is empty or not found" >&2
     exit 1
 fi
 
-MYSQL_USER=$(grep -m1 '^db_user=' ../secrets/credentials.txt | cut -d '=' -f2 | sed 's/[[:space:]]*$//')
+MYSQL_USER=$(grep -m1 '^db_user=' ~/inception/secrets/credentials.txt | cut -d '=' -f2 | sed 's/[[:space:]]*$//')
 
 if [ -z "${MYSQL_USER:-}" ]; then
-    echo "ERROR: db_user not found in ../secrets/credentials.txt" >&2
+    echo "ERROR: db_user not found in ~/inception/secrets/credentials.txt" >&2
     exit 1
 fi
 
-MYSQL_PASSWORD=$(cat ../secrets/db_password.txt | sed 's/[[:space:]]*$//')
-
+MYSQL_PASSWORD=$(cat ~/inception/secrets/db_password.txt | sed 's/[[:space:]]*$//')
 if [ -z "${MYSQL_PASSWORD:-}" ]; then
     echo "ERROR: db_password.txt is empty" >&2
     exit 1
@@ -45,6 +43,8 @@ WORDPRESS_DB_NAME=$MYSQL_DATABASE
 
 DOMAIN_NAME=aistierl.42.fr
 EOF
+
+mv .env ../..
 
 exit 0
 
