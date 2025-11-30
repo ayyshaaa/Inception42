@@ -3,8 +3,8 @@ socket=/var/run/mysqld/mysqld.sock
 port=3306
 
 [mariadbd]
-datadir=/var/lib/mysql
 user=mysql
+datadir=/home/mysql/data
 
 character_set_server=utf8mb4
 
