@@ -3,18 +3,18 @@ services:
     image: mariadb-image
     container_name: mariadb-container
     build:
-      context: .
-      dockerfile: requirements/mariadb/Dockerfile
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
     restart: on-failure
     ports: 
       - '3306:3306'
     environment:
-      - MYSQL_DATABASE= $(MYSQL_DATABASE)
-      - MYSQL_ROOT_PASSWORD= $(MYSQL_ROOT_PASSWORD)
-      - MYSQL_USER= $(MYSQL_USER)
-      - MYSQL_PASSWORD= $(MYSQL_PASSWORD)
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - data:/var/lib/mysql
+      - data:/home/mysql/data
     # networks:
     #   - docker_network
 
