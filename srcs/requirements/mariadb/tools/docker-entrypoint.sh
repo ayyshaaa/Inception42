@@ -1,19 +1,6 @@
 #!/bin/bash
 set -e
 
-# Signal handling
-signal_terminate() {
-    echo "Received SIGTERM, shutting down MariaDB..."
-    if [ -n "$MARIADB_PID" ]; then
-        mariadb-admin -u root --password=$MYSQL_ROOT_PASSWORD shutdown 2>/dev/null || \
-        kill -TERM "$MARIADB_PID"
-        wait "$MARIADB_PID"
-    fi
-    echo "MariaDB shutdown complete."
-}
-
-trap "signal_terminate" SIGTERM SIGINT
-
 # Initialize MariaDB if data directory is empty
 if [ ! -d "/home/$MYSQL_USER/data/mysql" ]; then
     echo "Initializing MariaDB database..."
@@ -36,6 +23,4 @@ else
 fi
 
 echo "Starting MariaDB..."
-mariadbd --user=$MYSQL_USER &
-MARIADB_PID=$!
-wait $MARIADB_PID
+exec mariadbd --user=$MYSQL_USER
