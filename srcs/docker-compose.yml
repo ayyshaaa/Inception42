@@ -15,8 +15,30 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - data:/home/mysql/data
-    # networks:
-    #   - docker_network
+    networks:
+      - inception_network
+  wordpress:
+    image: wordpress-image
+    container_name: wordpress-container
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "3306:3306"
+      - '9000:9000'
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - wp_wb_files:
+    networks:
+      - inception_network
 
 volumes:
   data:
@@ -25,5 +47,7 @@ volumes:
       type: 'none'
       o: bind
       device: "/home/aistierl/inception/srcs/requirements/mariadb/data"
+  wp_wb_files:
 
-# networks:
+networks:
+  inception_network:
