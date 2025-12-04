@@ -4,7 +4,7 @@ port=3306
 
 [mariadbd]
 user=mysql
-datadir=/home/mysql/data
+datadir=/var/lib/mysql
 
 character_set_server=utf8mb4
 
