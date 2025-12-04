@@ -2,10 +2,10 @@
 set -e
 
 # Initialize MariaDB if data directory is empty
-if [ ! -d "/home/$MYSQL_USER/data/mysql" ]; then
+if [ ! -d "/var/lib/mysql" ]; then
     echo "Initializing MariaDB database..."
-    chown -R $MYSQL_USER:$MYSQL_USER /home/$MYSQL_USER/data /var/log/mysql /var/run/mysqld
-    chmod 755 /home/$MYSQL_USER/data /var/log/mysql /var/run/mysqld
+    chown -R $MYSQL_USER:$MYSQL_USER /var/lib/mysql /var/log/mysql /var/run/mysqld
+    chmod 755 /var/lib/mysql /var/log/mysql /var/run/mysqld
     mariadb-install-db --user=$MYSQL_USER
     if [ -d "/docker-entrypoint-initdb.d" ] && [ "$(ls -A /docker-entrypoint-initdb.d 2>/dev/null)" ]; then
         mariadbd --user=$MYSQL_USER --skip-networking --socket=/var/run/mysqld/mysqld.sock &
@@ -19,8 +19,7 @@ if [ ! -d "/home/$MYSQL_USER/data/mysql" ]; then
     fi
 else
     echo "MariaDB data directory exists, skipping initialization."
-    chown -R $MYSQL_USER:$MYSQL_USER /home/$MYSQL_USER/data /var/log/mysql /var/run/mysqld
+    chown -R $MYSQL_USER:$MYSQL_USER /var/lib/mysql /var/log/mysql /var/run/mysqld
 fi
 
 echo "Starting MariaDB..."
-exec mariadbd --user=$MYSQL_USER
