@@ -2,12 +2,22 @@
 
 set -e
 
-if [ ! -e /var/www/html/index.php ] && [ ! -e /var/www/html/wp-includes/version.php ]; 
-tar cf - -C /usr/src/wordpress . | tar xf - -C /var/www/html
-mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
-#edit le .php et inserer les valeurs env
-fi
+wp core download --path=/var/www/html --allow-root
+wp config create --path=/var/www/html --dbname="$WORDPRESS_DB_NAME" \
+    --dbuser="$WORDPRESS_DB_USER" \
+    --dbpass="$WORDPRESS_DB_PASSWORD" \
+    --dbhost="$WORDPRESS_DB_HOST" \
+    --allow-root
+wp core install --path=/var/www/html \
+    --url="http://$DOMAIN_NAME" \
+    --title="Inception" \
+    --admin_user="$WORDPRESS_ADMIN_NAME" \
+    --admin_password="$WORDPRESS_ADMIN_PASSWORD" \
+    --admin_email="$WORDPRESS_ADMIN_EMAIL" \
+    --locale="fr_FR" \
+    --skip-email \
+    --allow-root
+wp user create "$WORDPRESS_USER_NAME" "$WORDPRESS_USER_EMAIL" \
+    --user_pass="$WORDPRESS_USER_PASSWORD" --role="author" --allow-root
 
-#mariadb cli
-
-#language fr au lieu de en
+chown -R www-data:www-data /var/www/html
