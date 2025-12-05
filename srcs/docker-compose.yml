@@ -6,8 +6,8 @@ services:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
     restart: on-failure
-    ports: 
-      - '3306:3306'
+    expose: 
+      - '3306'
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -17,28 +17,26 @@ services:
       - data:/var/lib/mysql
     networks:
       - inception_network
-#  wordpress:
-#    image: wordpress-image
-#    container_name: wordpress-container
-#    build:
-#      context: ./requirements/wordpress
-#      dockerfile: Dockerfile
-#    restart: on-failure
-#    ports:
-#      - "3306:3306"
-#      - '9000:9000'
-#    environment:
-#      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-#      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-#      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-#      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-#    depends_on:
-#      db:
-#        condition: service_healthy
-#    volumes:
-#      - wp_files:/var/www/html/
-#    networks:
-#      - inception_network
+  wordpress:
+   image: wordpress-image
+   container_name: wordpress-container
+   build:
+     context: ./requirements/wordpress
+     dockerfile: Dockerfile
+   restart: on-failure
+   expose:
+     - '9000'
+   environment:
+     WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+     WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+     WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+     WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+   depends_on:
+     - db
+   volumes:
+     - wp_files:/var/www/html
+   networks:
+     - inception_network
 #  nginx:
 #    image: nginx-image
 #    container-name: nginx-container
@@ -47,15 +45,13 @@ services:
 #      dockerfile: Dockerfile
 #    restart: on-failure
 #    ports:
-#      - "9000:9000"
 #      - "443:443"
 #    depends-on:
-#      wordpress:
-#        condition: service_healthy
+#      - wordpress
 #    volumes:
 #      - wp_files
 #    networks:
-#      - inception-network
+#      - inception_network
 
 volumes:
   data:
@@ -63,13 +59,14 @@ volumes:
     driver_opts:
       type: 'none'
       o: bind
-      device: "/home/aistierl/data/mariadb-volume"
-#  wp_files:i
-#    driver: local
-#    driver_opts:
-#      type: 'none'
-#      o: bind
-#      device: "/home/aistierl/data/wordpress-nginx-volume"   
+      device: "/home/${USER}/data/mariadb-volume"
+  wp_files:
+    driver: local
+    driver_opts:
+     type: 'none'
+     o: bind
+     device: "/home/${USER}/data/wordpress-nginx-volume"   
 
 networks:
   inception_network:
+    driver: bridge
