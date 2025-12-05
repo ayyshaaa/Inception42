@@ -7,6 +7,7 @@ clean:
 	docker system prune -a -f
 	rm -rf ./srcs/.env
 	sudo rm -rf ../data/mariadb-volume/*
+	sudo rm -rf ../data/wordpress-nginx-volume/*
 
 re: clean all
 
