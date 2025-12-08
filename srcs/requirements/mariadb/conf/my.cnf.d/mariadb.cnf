@@ -1,21 +1,11 @@
-[client-server]
+[mariadbd]
 socket=/var/run/mysqld/mysqld.sock
 port=3306
-
-[mariadbd]
 user=mysql
 datadir=/var/lib/mysql
-
+skip-networking=0
 character_set_server=utf8mb4
-
-# Logging configuration
-log-basename=mariadbd
-log_output=FILE
-general_log
-general_log_file=/var/log/mysql/general.log
 log_error=/var/log/mysql/error.log
-
-# Security and networking
 bind-address=0.0.0.0
 
 
