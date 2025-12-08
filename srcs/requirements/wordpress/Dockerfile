@@ -17,7 +17,7 @@ RUN apk upgrade && \
 		php-zip \
 		php-phar \
 		php-cli \
-		php-fpm
+		php83-fpm
 
 RUN addgroup -g 82 -S www-data 2>/dev/null || true && \
 	adduser -u 82 -D -S -G www-data www-data 2>/dev/null || true && \
@@ -30,12 +30,10 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 COPY tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
-	mkdir -p /var/run/php-fpm && \
-	chown -R www-data:www-data /var/run/php-fpm
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 WORKDIR /var/www/html
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["php-fpm", "-F"]
+CMD ["/usr/sbin/php-fpm83", "-F"]
