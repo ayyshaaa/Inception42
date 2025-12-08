@@ -2,7 +2,9 @@
 
 set -e
 
-if [ ! -f /var/www/html/wp-config.php ]; then
+cd /var/www/html
+
+if [ ! -f wp-config.php ] || [ ! -f .wp-installed-flag  ]; then
 	php -d memory_limit=256M /usr/local/bin/wp core download --allow-root
 
 	wp config create --dbname="$WORDPRESS_DB_NAME" \
@@ -27,6 +29,10 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
 	wp language core install fr_FR --allow-root
 	wp site switch-language fr_FR --allow-root
+
+	touch .wp-installed-flag
 fi
 
 chown -R www-data:www-data /var/www/html
+
+exec "$@"
