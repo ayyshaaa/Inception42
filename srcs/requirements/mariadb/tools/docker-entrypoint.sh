@@ -23,3 +23,4 @@ else
 fi
 
 echo "Starting MariaDB..."
+exec "$@"
