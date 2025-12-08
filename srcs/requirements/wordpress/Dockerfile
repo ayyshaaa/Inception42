@@ -6,29 +6,18 @@ RUN apk upgrade && \
 		bash \
 		curl \
 		php-curl \
-		php-date \
 		php-dom \
-		php-filter \
-		php-ftp \
 		php-gd \
-		php-hash \
-		php-iconv \ 
+		php-iconv \
 		php-json \
-		php-libxml \
 		php-mbstring \
 		php-mysqli \
 		php-openssl \
-		php-pcre \
-		php-posix \
-		php-sockets \
-		php-tokenizer \
 		php-xml \
-		php-xmlreader \
-		php-zlib \
 		php-zip \
 		php-phar \
 		php-cli \
-		php-fpm \
+		php-fpm
 
 RUN addgroup -g 82 -S www-data 2>/dev/null || true && \
 	adduser -u 82 -D -S -G www-data www-data 2>/dev/null || true && \
@@ -41,7 +30,11 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 COPY tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
+	mkdir -p /var/run/php-fpm && \
+	chown -R www-data:www-data /var/run/php-fpm
+
+WORKDIR /var/www/html
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
