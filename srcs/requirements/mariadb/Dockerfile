@@ -21,4 +21,4 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
 
-CMD [ "mariadbd", "--user=$MYSQL_USER" ]
+CMD mariadbd --user="$MYSQL_USER"
