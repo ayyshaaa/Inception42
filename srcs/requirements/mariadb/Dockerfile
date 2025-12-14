@@ -17,7 +17,7 @@ COPY ./tools/init-database.sh /docker-entrypoint-initdb.d/01-init-database.sh
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY ./conf/my.cnf.d/mariadb.cnf /etc/my.cnf.d/mariadb.cnf
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod 555 /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
 
