@@ -24,46 +24,48 @@ services:
     networks:
       - inception_network
   wordpress:
-   image: wordpress-image
-   container_name: wordpress-container
-   build:
-     context: ./requirements/wordpress
-     dockerfile: Dockerfile
-   restart: on-failure
-   expose:
-     - '9000'
-   environment:
-     WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-     WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-     WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-     WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-     WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
-     WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
-     WORDPRESS_USER_NAME: ${WORDPRESS_USER_NAME}
-     WORDPRESS_USER_PASSWORD: ${WORDPRESS_USER_PASSWORD}
-     WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
-   depends_on:
-     db:
-       condition: service_healthy
-   volumes:
-     - wp_files:/var/www/html
-   networks:
-     - inception_network
-#  nginx:
-#    image: nginx-image
-#    container-name: nginx-container
-#    build:
-#      context: ./requirements/nginx
-#      dockerfile: Dockerfile
-#    restart: on-failure
-#    ports:
-#      - "443:443"
-#    depends-on:
-#      - wordpress
-#    volumes:
-#      - wp_files
-#    networks:
-#      - inception_network
+    image: wordpress-image
+    container_name: wordpress-container
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    restart: on-failure
+    expose:
+      - '9000'
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+      WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
+      WORDPRESS_USER_NAME: ${WORDPRESS_USER_NAME}
+      WORDPRESS_USER_PASSWORD: ${WORDPRESS_USER_PASSWORD}
+      WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - wp_files:/var/www/html
+    networks:
+      - inception_network
+  nginx:
+    image: nginx-image
+    container_name: nginx-container
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "443:443"
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+    depends_on:
+      - wordpress
+    volumes:
+      - wp_files:/var/www/html
+    networks:
+      - inception_network
 
 volumes:
   data:
