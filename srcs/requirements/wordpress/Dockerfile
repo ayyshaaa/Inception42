@@ -5,6 +5,7 @@ RUN apk upgrade && \
 	apk add --no-cache \ 
 		bash \
 		curl \
+		iproute2 \
 		php-curl \
 		php-dom \
 		php-gd \
@@ -30,9 +31,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 COPY tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-WORKDIR /var/www/html
+RUN chmod 555 /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
