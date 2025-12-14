@@ -4,6 +4,7 @@ set -e
 
 cd /var/www/html
 
+echo "Proceeding with WordPress installation..."
 if [ ! -f wp-config.php ] || [ ! -f .wp-installed-flag  ]; then
 	php -d memory_limit=256M /usr/local/bin/wp core download --allow-root
 
@@ -31,8 +32,16 @@ if [ ! -f wp-config.php ] || [ ! -f .wp-installed-flag  ]; then
 	wp site switch-language fr_FR --allow-root
 
 	touch .wp-installed-flag
+else
+	echo "WordPress is already installed, skipping installation."
 fi
 
 chown -R www-data:www-data /var/www/html
 
+sed -i "s/^listen = .*/listen = 9000/" /etc/php*/php-fpm.d/www.conf
+sed -i "s/^user = .*/user = www-data/" /etc/php*/php-fpm.d/www.conf
+sed -i "s/^group = .*/group = www-data/" /etc/php*/php-fpm.d/www.conf
+
+echo "Starting WordPress..."
+echo "Executing: $@"
 exec "$@"
