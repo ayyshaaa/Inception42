@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb-image
+    image: mariadb
     container_name: mariadb-container
     build:
       context: ./requirements/mariadb
@@ -24,7 +24,7 @@ services:
     networks:
       - inception_network
   wordpress:
-    image: wordpress-image
+    image: wordpress
     container_name: wordpress-container
     build:
       context: ./requirements/wordpress
@@ -33,10 +33,12 @@ services:
     expose:
       - '9000'
     environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_ADMIN_NAME: ${WORDPRESS_ADMIN_NAME}
       WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
       WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
       WORDPRESS_USER_NAME: ${WORDPRESS_USER_NAME}
@@ -50,7 +52,7 @@ services:
     networks:
       - inception_network
   nginx:
-    image: nginx-image
+    image: nginx
     container_name: nginx-container
     build:
       context: ./requirements/nginx
@@ -83,4 +85,3 @@ volumes:
 
 networks:
   inception_network:
-    driver: bridge
