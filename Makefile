@@ -1,7 +1,6 @@
 all:
 	cd ./srcs/requirements/tools && sh ./generate_env.sh
-	cd ./srcs && docker compose up -d
-#	w3m https://aistierl.42.fr
+	cd ./srcs && docker compose up -d --build
 
 clean:
 	cd ./srcs && docker compose down --volumes --remove-orphans
