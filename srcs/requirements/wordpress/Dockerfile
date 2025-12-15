@@ -18,6 +18,7 @@ RUN apk upgrade && \
 		php-zip \
 		php-phar \
 		php-cli \
+		php83-ctype \
 		php83-fpm
 
 RUN addgroup -g 82 -S www-data 2>/dev/null || true && \
