@@ -15,13 +15,16 @@ if [ ! -f wp-config.php ] || [ ! -f .wp-installed-flag  ]; then
 		--locale="fr_FR" \
 		--allow-root
 
-	wp core install --url="http://$DOMAIN_NAME" \
+	wp core install --url="https://$DOMAIN_NAME" \
 		--title="Inception" \
 		--admin_user="$WORDPRESS_ADMIN_NAME" \
 		--admin_password="$WORDPRESS_ADMIN_PASSWORD" \
 		--admin_email="$WORDPRESS_ADMIN_EMAIL" \
 		--skip-email \
 		--allow-root
+
+	wp option update home "https://$DOMAIN_NAME"
+	wp option update siteurl "https://$DOMAIN_NAME"
 
 	wp user create "$WORDPRESS_USER_NAME" "$WORDPRESS_USER_EMAIL" \
 		--user_pass="$WORDPRESS_USER_PASSWORD" \

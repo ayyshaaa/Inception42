@@ -35,4 +35,4 @@ RUN chmod 555 /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["/usr/sbin/php-fpm83", "-F"]
+CMD ["php-fpm83", "-F"]
