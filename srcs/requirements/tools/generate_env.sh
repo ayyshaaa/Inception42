@@ -64,7 +64,7 @@ if [ -z "${WORDPRESS_USER_EMAIL:-}" ]; then
     exit 1
 fi
 
-WORDPRESS_DB_HOST="db"
+WORDPRESS_DB_HOST="mariadb"
 
 cat <<EOF > .env
 MYSQL_DATABASE=${MYSQL_DATABASE}
