@@ -1,11 +1,11 @@
 services:
-  db:
+  mariadb:
     image: mariadb
     container_name: mariadb-container
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
-    restart: on-failure
+    restart: unless-stopped
     expose: 
       - '3306'
     environment:
@@ -29,7 +29,7 @@ services:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-    restart: on-failure
+    restart: unless-stopped
     expose:
       - '9000'
     environment:
@@ -45,7 +45,7 @@ services:
       WORDPRESS_USER_PASSWORD: ${WORDPRESS_USER_PASSWORD}
       WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
     depends_on:
-      db:
+      mariadb:
         condition: service_healthy
     volumes:
       - wp_files:/var/www/html
@@ -57,7 +57,7 @@ services:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "443:443"
     environment:
